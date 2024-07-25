@@ -1,0 +1,11 @@
+project_prefix     = "prefix"
+ssh_public_key     = "ssh-ed25519 AAAAC3......"
+#wait_for_online   = true
+#
+aws_access_key      = ""
+aws_secret_key      = ""
+aws_owner_tag       = "user@email.com"
+aws_region          = "eu-north-1"
+aws_availability_zones = [ "a", "b", "c"]
+aws_ami_name        = "f5xc-ce-9.2024.22-20240716030036"
+
