@@ -9,11 +9,11 @@ resource "aws_vpc" "sli_vpc" {
 }
 
 resource "aws_subnet" "sli" {
-  count                   = length(var.aws_sli_subnets) * var.master_node_count
-  vpc_id                  = element(aws_vpc.sli_vpc[*].id, floor(count.index / var.master_node_count))
-  cidr_block              = var.aws_sli_subnets[floor(count.index / var.master_node_count)].vpc_subnets[(count.index % var.master_node_count)]
+  count                   = length(var.aws_sli_subnets) * length(var.aws_availability_zones)
+  vpc_id                  = element(aws_vpc.sli_vpc[*].id, floor(count.index / length(var.aws_availability_zones)))
+  cidr_block              = var.aws_sli_subnets[floor(count.index / length(var.aws_availability_zones))].vpc_subnets[(count.index % length(var.aws_availability_zones))]
   map_public_ip_on_launch = false
-  availability_zone       = format("%s%s", var.aws_region, var.aws_availability_zones[count.index % var.master_node_count])
+  availability_zone       = format("%s%s", var.aws_region, var.aws_availability_zones[count.index % length(var.aws_availability_zones)])
   tags                    = {
     Name    = format("%s-sli-%d%s", var.f5xc_cluster_name, count.index, var.aws_availability_zones[count.index % length(var.aws_availability_zones)])
     Creator = var.aws_owner_tag

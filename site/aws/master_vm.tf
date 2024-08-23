@@ -12,10 +12,11 @@ resource "aws_instance" "master_vm" {
     network_interface_id = element(aws_network_interface.sm_slo_eni[*].id, count.index)
     device_index         = 0
   }
+
   dynamic "network_interface" {
     for_each = range(0, length(var.aws_sli_subnets))
     content {
-      network_interface_id = element(aws_network_interface.sm_sli_eni[*].id, count.index + network_interface.value * var.master_node_count)
+      network_interface_id = element(aws_network_interface.sm_sli_eni[*].id, 2 * count.index + network_interface.value % length(var.aws_sli_subnets))
       device_index         = network_interface.value + 1
     }
   }
@@ -46,9 +47,9 @@ resource "aws_network_interface" "sm_slo_eni" {
 resource "aws_network_interface" "sm_sli_eni" {
   depends_on      = [ aws_subnet.sli ]
   count           = length(var.aws_sli_subnets) * var.master_node_count
-  subnet_id       = element(aws_subnet.sli[*].id, count.index)
-  security_groups = [ element(resource.aws_security_group.allow_sli_traffic[*].id, floor(count.index / var.master_node_count)) ]
-  tags            = element(aws_subnet.sli[*].tags, count.index)
+  subnet_id       = element(aws_subnet.sli[*].id, length(var.aws_availability_zones) * (count.index % length(var.aws_sli_subnets)) + floor(count.index / 2) % length(var.aws_availability_zones))
+  security_groups = [ element(resource.aws_security_group.allow_sli_traffic[*].id, count.index % length(var.aws_sli_subnets)) ]
+  tags            = element(aws_subnet.sli[*].tags, length(var.aws_availability_zones) * (count.index % length(var.aws_sli_subnets)) + floor(count.index /2) % length(var.aws_availability_zones))
 }
 
 resource "aws_eip" "sm_pub_ips" {

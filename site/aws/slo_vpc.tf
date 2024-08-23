@@ -8,7 +8,7 @@ resource "aws_vpc" "slo_vpc" {
 }
 
 resource "aws_subnet" "slo" {
-  count                   = var.master_node_count == 1 ? 1 : length(var.aws_slo_subnets)
+  count                   = length(var.aws_availability_zones)
   vpc_id                  = aws_vpc.slo_vpc.id
   cidr_block              = var.aws_slo_subnets[count.index]
   map_public_ip_on_launch = false

@@ -1,7 +1,7 @@
 module "aws" {
   count                     = 1
   source                    = "./site"
-  f5xc_cluster_name         = format("%s-aws-%d", var.project_prefix, count.index)
+  f5xc_cluster_name         = format("%s-aws-mvpc-%d", var.project_prefix, count.index)
   secure_mesh_site_provider = "aws"
   aws_instance_type         = "t3.xlarge"
   aws_ami_name              = var.aws_ami_name
@@ -12,7 +12,7 @@ module "aws" {
   }
   aws_availability_zones    = [ "a", "b", "c"]
 
-  master_node_count         = 3
+  master_node_count         = 4
   worker_node_count         = 0
 
   ssh_public_key            = var.ssh_public_key
@@ -35,5 +35,4 @@ module "aws" {
   f5xc_tenant               = var.f5xc_tenant
   f5xc_api_url              = var.f5xc_api_url
   f5xc_api_token            = var.f5xc_api_token
-  wait_for_online           = var.wait_for_online
 }
