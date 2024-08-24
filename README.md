@@ -39,4 +39,4 @@ instance_type=(c5.*) ...
 +--------------+--------------------+-------+-----+
 ```
 
-[./describe-ec2-instance-type.sh \*)](./all-instances.txt)
+[./describe-ec2-instance-type.sh \*](./all-instances.txt)
