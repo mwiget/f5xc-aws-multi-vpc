@@ -29,8 +29,10 @@ resource "restapi_object" "site" {
       "logs_streaming_disabled": {},
       "block_all_services": {},
       "performance_enhancement_mode": {
-        "perf_mode_l7_enhanced": {}
-      },
+      "perf_mode_l3_enhanced": {
+        "no_jumbo": {}
+      }
+    },
       "offline_survivability_mode": {
         "no_offline_survivability_mode": {}
       },
