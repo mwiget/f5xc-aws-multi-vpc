@@ -38,6 +38,7 @@ resource "aws_network_interface" "sm_slo_eni" {
   count           = var.master_node_count
   subnet_id       = element(aws_subnet.slo[*].id, count.index)
   security_groups = [ resource.aws_security_group.allow_slo_traffic.id ]
+  source_dest_check = false
   tags = {
     Name = format("%s-slo-eni-%d", var.f5xc_cluster_name, count.index)
     Creator = var.aws_owner_tag
@@ -49,6 +50,7 @@ resource "aws_network_interface" "sm_sli_eni" {
   count           = length(var.aws_sli_subnets) * var.master_node_count
   subnet_id       = element(aws_subnet.sli[*].id, length(var.aws_availability_zones) * (count.index % length(var.aws_sli_subnets)) + floor(count.index / 2) % length(var.aws_availability_zones))
   security_groups = [ element(resource.aws_security_group.allow_sli_traffic[*].id, count.index % length(var.aws_sli_subnets)) ]
+  source_dest_check = false
   tags            = element(aws_subnet.sli[*].tags, length(var.aws_availability_zones) * (count.index % length(var.aws_sli_subnets)) + floor(count.index /2) % length(var.aws_availability_zones))
 }
 
