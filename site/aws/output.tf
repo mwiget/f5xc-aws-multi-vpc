@@ -29,3 +29,10 @@ output "ip_address" {
       node.private_ip => node.public_ip
   }
 }
+
+output "workload_ip_address" {
+    value = {
+    for node in concat(aws_instance.workload_vm):
+      node.private_ip => node.public_ip
+  }
+}

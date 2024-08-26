@@ -1,0 +1,13 @@
+#cloud-config
+users:
+  - default
+  - name: ubuntu
+    gecos: ubuntu
+    primary_group: ubuntu
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    groups: users, admin
+    ssh_import_id:
+    lock_passwd: false
+    ssh_authorized_keys:
+      - ${ssh_public_key}
+
