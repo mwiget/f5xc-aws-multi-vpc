@@ -38,7 +38,6 @@ resource "aws_network_interface" "sm_slo_eni" {
   count           = var.master_node_count
   subnet_id       = element(aws_subnet.slo[*].id, count.index)
   security_groups = [ resource.aws_security_group.allow_slo_traffic.id ]
-  source_dest_check = false
   tags = {
     Name = format("%s-slo-eni-%d", var.f5xc_cluster_name, count.index)
     Creator = var.aws_owner_tag
